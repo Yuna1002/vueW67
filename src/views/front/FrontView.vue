@@ -21,7 +21,9 @@
             <RouterLink to="/carts" class="nav-link">購物車</RouterLink>
           </div>
           <div class="navbar-nav">
-            <RouterLink to="/login" class="nav-link">登入後台</RouterLink>
+            <RouterLink to="/admin/products" class="nav-link"
+              >前往後台</RouterLink
+            >
           </div>
         </div>
       </div>

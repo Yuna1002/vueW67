@@ -25,13 +25,58 @@
           </div>
           <div class="navbar-nav">
             <RouterLink to="/" class="nav-link">前往前台</RouterLink>
-            <RouterLink to="/" class="nav-link">登出</RouterLink>
+            <a href="" class="nav-link" @click.prevent="logout">登出</a>
           </div>
         </div>
       </div>
     </nav>
 
     <hr />
-    <RouterView />
+    <RouterView v-if="successCheck" />
   </div>
 </template>
+<script>
+const { VITE_APP_URL } = import.meta.env;
+export default {
+  data() {
+    return {
+      successCheck: false,
+    };
+  },
+  methods: {
+    checkAccount() {
+      //從cookie取出token
+      const token = document.cookie.replace(
+        /(?:(?:^|.*;\s*)yunaToken\s*=\s*([^;]*).*$)|^.*$/,
+        "$1"
+      );
+      if (token) {
+        //將token放置hearders
+        this.$http.defaults.headers.common["Authorization"] = token;
+        this.$http
+          .post(`${VITE_APP_URL}/api/user/check`)
+          .then(() => {
+            this.successCheck = true;
+          })
+          .catch((err) => {
+            alert(err.response.data.message);
+            this.$router.push("/login");
+          });
+      } else {
+        alert("請先登入");
+        this.$router.push("/login");
+      }
+    },
+    logout() {
+      document.cookie = "yunaToken=;expires=;";
+      this.$http.post(`${VITE_APP_URL}/logout`).then((res) => {
+        alert(res.data.message);
+        this.$router.push("/");
+      });
+    },
+  },
+  mounted() {
+    this.checkAccount();
+  },
+};
+</script>
