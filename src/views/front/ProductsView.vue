@@ -1,4 +1,5 @@
 <template>
+  <h2 class="text-center mb-5">產品列表</h2>
   <table class="table align-middle">
     <thead>
       <tr>
@@ -33,7 +34,7 @@
             >
               查看更多
             </RouterLink>
-            <!-- <button
+            <button
               type="button"
               class="btn btn-outline-danger"
               @click="addToCart(product.id, 1)"
@@ -44,7 +45,7 @@
                 v-if="loadingItem === product.id"
               ></i>
               加到購物車
-            </button> -->
+            </button>
           </div>
         </td>
       </tr>
@@ -66,6 +67,19 @@ export default {
         .get(`${VITE_APP_URL}/api/${VITE_APP_PATH}/products`)
         .then((res) => {
           this.products = res.data.products;
+        });
+    },
+    addToCart(product_id, qty) {
+      this.loadingItem = product_id;
+      const data = { product_id, qty };
+      this.$http
+        .post(`${VITE_APP_URL}/api/${VITE_APP_PATH}/cart`, { data })
+        .then((res) => {
+          alert(res.data.message);
+          this.loadingItem = "";
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
   },
