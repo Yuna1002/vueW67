@@ -58,23 +58,30 @@
     :temp-product="editItem"
     @del-product="delProduct"
   ></DelProductModal>
+  <PaginationCpmponent
+    :pages="pages"
+    @get-data="getProducts"
+  ></PaginationCpmponent>
 </template>
+
 <script>
 import ProductModal from "../../components/ProductModal.vue";
 import DelProductModal from "../../components/DelProductModal.vue";
+import PaginationCpmponent from "../../components/PaginationCpmponent.vue";
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
-
 export default {
   data() {
     return {
       products: [],
       isNew: true, //判斷modal裡的確認鍵是新增/編輯
       editItem: {},
+      pages: {},
     };
   },
   components: {
     ProductModal,
     DelProductModal,
+    PaginationCpmponent,
   },
   methods: {
     getProducts(page = 1) {
@@ -93,6 +100,7 @@ export default {
     },
     openModal(state, item) {
       if (state === "new") {
+        this.editItem = {};
         this.isNew = true;
         this.$refs.productModal.show(); //$refs 外層取用內層方法
       } else if (state === "edit") {

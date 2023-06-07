@@ -32,6 +32,7 @@
                     placeholder="請輸入圖片連結"
                     v-model="tempProduct.imageUrl"
                   />
+                  <input type="file" @change="upload" ref="fileInput" />
                 </div>
                 <img
                   class="img-fluid"
@@ -219,8 +220,10 @@
     </div>
   </div>
 </template>
+
 <script>
 import Modal from "bootstrap/js/dist/modal";
+const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 export default {
   props: ["isNew", "editItem"],
   emits: ["addProduct", "editProduct"],
@@ -238,6 +241,26 @@ export default {
     },
     hide() {
       this.productModal.hide();
+    },
+    createImages() {
+      this.tempProduct.imagesUrl = [];
+      this.tempProduct.imagesUrl.push("");
+    },
+    upload() {
+      //將檔案取出
+      const file = this.$refs.fileInput.files[0];
+      //api上傳格式為formData
+      const formData = new FormData();
+      formData.append("file-to-upload", file);
+      this.$http
+        .post(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/upload`, formData)
+        .then((res) => {
+          this.tempProduct.imageUrl = res.data.imageUrl;
+          this.$refs.fileInput.value = "";
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   watch: {

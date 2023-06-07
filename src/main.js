@@ -12,6 +12,7 @@ import { Field, Form, ErrorMessage, defineRule, configure } from "vee-validate";
 import AllRules from "@vee-validate/rules";
 import { localize, setLocale } from "@vee-validate/i18n";
 import zhTW from "@vee-validate/i18n/dist/locale/zh_TW.json";
+import { date } from "./methods/filters.js";
 
 Object.keys(AllRules).forEach((rule) => {
   defineRule(rule, AllRules[rule]);
@@ -23,6 +24,9 @@ configure({
 setLocale("zh_TW"); // 設定預設語系 繁體中文
 
 const app = createApp(App);
+app.config.globalProperties.$filters = {
+  date,
+};
 
 app.use(createPinia());
 app.use(router);
