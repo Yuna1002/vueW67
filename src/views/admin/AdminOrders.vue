@@ -53,13 +53,13 @@
               >
                 檢視
               </button> -->
-            <!-- <button
-                class="btn btn-outline-danger btn-sm"
-                type="button"
-                @click="openDelOrderModal(order)"
-              >
-                刪除
-              </button> -->
+            <button
+              class="btn btn-outline-danger btn-sm"
+              type="button"
+              @click="openDelModal(order)"
+            >
+              刪除
+            </button>
           </div>
         </td>
       </tr>
@@ -69,20 +69,24 @@
     :pages="pages"
     @get-data="getOrders"
   ></PaginationCpmponent>
+  <DelModal ref="delOrderModal" :temp="temp" @del="delOrder"></DelModal>
 </template>
 
 <script>
 import PaginationCpmponent from "../../components/PaginationCpmponent.vue";
+import DelModal from "../../components/DelModal.vue";
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 export default {
   data() {
     return {
       orders: [],
       pages: {},
+      temp: {},
     };
   },
   components: {
     PaginationCpmponent,
+    DelModal,
   },
   methods: {
     getOrders(page = 1) {
@@ -90,7 +94,7 @@ export default {
       this.$http
         .get(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/orders/?page=${page}`)
         .then((res) => {
-          console.log(res.data);
+          console.log("訂單", res.data);
           this.orders = res.data.orders;
           this.pages = res.data.pagination;
         })
@@ -109,6 +113,22 @@ export default {
         .then((res) => {
           alert(res.data.message);
         });
+    },
+    delOrder(id) {
+      this.$http
+        .delete(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/order/${id}`)
+        .then((res) => {
+          alert(res.data.message);
+          this.$refs.delOrderModal.hide();
+          this.getOrders();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    openDelModal(order) {
+      this.temp = { ...order };
+      this.$refs.delOrderModal.show();
     },
   },
   mounted() {

@@ -53,11 +53,7 @@
     @add-product="addProduct"
     @edit-product="editProduct"
   ></ProductModal>
-  <DelProductModal
-    ref="delProductModal"
-    :temp-product="editItem"
-    @del-product="delProduct"
-  ></DelProductModal>
+  <DelModal ref="delProductModal" :temp="editItem" @del="delProduct"></DelModal>
   <PaginationCpmponent
     :pages="pages"
     @get-data="getProducts"
@@ -66,7 +62,7 @@
 
 <script>
 import ProductModal from "../../components/ProductModal.vue";
-import DelProductModal from "../../components/DelProductModal.vue";
+import DelModal from "../../components/DelModal.vue";
 import PaginationCpmponent from "../../components/PaginationCpmponent.vue";
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 export default {
@@ -80,7 +76,7 @@ export default {
   },
   components: {
     ProductModal,
-    DelProductModal,
+    DelModal,
     PaginationCpmponent,
   },
   methods: {
