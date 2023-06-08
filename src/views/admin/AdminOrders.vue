@@ -46,17 +46,17 @@
         </td>
         <td>
           <div class="btn-group">
-            <!-- <button
-                class="btn btn-outline-primary btn-sm"
-                type="button"
-                @click="openModal(order)"
-              >
-                檢視
-              </button> -->
+            <button
+              class="btn btn-outline-primary btn-sm"
+              type="button"
+              @click="openModal('preview', order)"
+            >
+              檢視
+            </button>
             <button
               class="btn btn-outline-danger btn-sm"
               type="button"
-              @click="openDelModal(order)"
+              @click="openModal('del', order)"
             >
               刪除
             </button>
@@ -70,11 +70,17 @@
     @get-data="getOrders"
   ></PaginationCpmponent>
   <DelModal ref="delOrderModal" :temp="temp" @del="delOrder"></DelModal>
+  <OrderModal
+    ref="OrderModal"
+    :temp="temp"
+    @update-paid="updatePaid"
+  ></OrderModal>
 </template>
 
 <script>
 import PaginationCpmponent from "../../components/PaginationCpmponent.vue";
 import DelModal from "../../components/DelModal.vue";
+import OrderModal from "../../components/OrderModal.vue";
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 export default {
   data() {
@@ -87,6 +93,7 @@ export default {
   components: {
     PaginationCpmponent,
     DelModal,
+    OrderModal,
   },
   methods: {
     getOrders(page = 1) {
@@ -112,6 +119,11 @@ export default {
         })
         .then((res) => {
           alert(res.data.message);
+          this.$refs.OrderModal.hide();
+          this.getOrders();
+        })
+        .catch((err) => {
+          console.log(err);
         });
     },
     delOrder(id) {
@@ -126,9 +138,13 @@ export default {
           console.log(err);
         });
     },
-    openDelModal(order) {
+    openModal(type, order) {
       this.temp = { ...order };
-      this.$refs.delOrderModal.show();
+      if (type === "del") {
+        this.$refs.delOrderModal.show();
+      } else {
+        this.$refs.OrderModal.show();
+      }
     },
   },
   mounted() {
