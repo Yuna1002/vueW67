@@ -12,6 +12,7 @@
         <div class="modal-header bg-danger text-white">
           <h5 id="delProductModalLabel" class="modal-title">
             <span v-if="temp.create_at">刪除訂單</span>
+            <span v-else-if="temp.due_date">刪除優惠券</span>
             <span v-else>刪除產品</span>
           </h5>
           <button
@@ -29,7 +30,7 @@
           >
           <span v-else
             ><strong class="text-danger">{{ temp.title }}</strong
-            >產品(刪除後將無法恢復)</span
+            >(刪除後將無法恢復)</span
           >
         </div>
         <div class="modal-footer">

@@ -22,6 +22,7 @@
             <RouterLink to="/admin/orders" class="nav-link"
               >訂單列表</RouterLink
             >
+            <RouterLink to="/admin/coupon" class="nav-link">優惠券</RouterLink>
           </div>
           <div class="navbar-nav">
             <RouterLink to="/" class="nav-link">前往前台</RouterLink>
